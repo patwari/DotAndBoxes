@@ -3,8 +3,9 @@ package com.mega.games.gamestartingkit.core.dataLoaders;
 import com.badlogic.gdx.graphics.Color;
 
 public class Constants {
-    public static float DOT_SIZE = 8f;
-    public static Color DOT_COLOR = Color.GRAY;
+    public static float DOT_SIZE = 15f;
+    public static Color DOT_COLOR = Color.WHITE;
+    public static Color DOT_BORDER_COLOR = Color.RED;
 
     // always keep NUM_ROW <= NUM_COL
     public static int NUM_ROW = 3;
