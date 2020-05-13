@@ -16,6 +16,29 @@ public class Dot extends Circle {
     }
 
     @Override
+    public void onTouchDown(float x, float y) {
+        super.onTouchDown(x, y);
+        if (this.isTouchWithin(x, y)) {
+            this.setRadius(Constants.DOT_SIZE * 1.5f);
+        }
+    }
+
+    protected boolean isTouchWithin(float x, float y) {
+        return this.getPos().dst2(x, y) < Math.pow(this.getRadius(), 2);
+    }
+
+    @Override
+    public void onTouchUp(float x, float y) {
+        super.onTouchUp(x, y);
+        this.setRadius(Constants.DOT_SIZE);
+    }
+
+    @Override
+    public void onTouchDragged(float x, float y) {
+        super.onTouchDragged(x, y);
+    }
+
+    @Override
     public void draw(Batch batch) {
         super.draw(batch);
 
