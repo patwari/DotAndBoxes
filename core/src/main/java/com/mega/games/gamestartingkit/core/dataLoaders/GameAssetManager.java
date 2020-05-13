@@ -24,6 +24,7 @@ public class GameAssetManager {
     public AtlasRegion squareOutline;
     private AssetManager manager;
     private TextureAtlas atlas;
+    public Texture game_bg;
 
     private GameAssetManager() {
     }
@@ -48,6 +49,7 @@ public class GameAssetManager {
     private void loadAssets() {
         //load texture atlas
         manager.load("texAtlas.txt", TextureAtlas.class);
+        manager.load("game_bg.jpg", Texture.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -69,6 +71,7 @@ public class GameAssetManager {
 
         //Textures
         atlas = manager.get("texAtlas.txt", TextureAtlas.class);
+        game_bg = manager.get("game_bg.jpg", Texture.class);
 
         //particles
         circle = atlas.findRegion("circle_fill");
