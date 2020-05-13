@@ -9,6 +9,7 @@ public abstract class GameObject {
     private Vector2 pos;
     private Vector2 size;
     private Color color;
+    public boolean visible = true;
 
     public GameObject() {
         //properties

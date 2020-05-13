@@ -58,7 +58,9 @@ public class Circle extends GameObject {
     @Override
     public void draw(Batch batch) {
         batch.setColor(getColor());
-        batch.draw(currReg, getPos().x - rad, getPos().y - rad, 2 * rad, 2 * rad);
+        if (this.visible) {
+            batch.draw(currReg, getPos().x - rad, getPos().y - rad, 2 * rad, 2 * rad);
+        }
         batch.setColor(new Color(1, 1, 1, 1));
     }
 }

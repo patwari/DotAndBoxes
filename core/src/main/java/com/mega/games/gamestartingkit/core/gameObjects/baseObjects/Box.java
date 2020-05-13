@@ -37,7 +37,9 @@ public class Box extends GameObject {
     @Override
     public void draw(Batch batch) {
         batch.setColor(getColor());
-        batch.draw(currReg, getPos().x, getPos().y, getSize().x, getSize().y);
+        if (this.visible) {
+            batch.draw(currReg, getPos().x, getPos().y, getSize().x, getSize().y);
+        }
         batch.setColor(new Color(1, 1, 1, 1));
     }
 }
