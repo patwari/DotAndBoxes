@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.BGController;
+import com.mega.games.gamestartingkit.core.gameObjects.entities.DotManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class GameObjectManager {
     public void reset() {
         //on reset, clear the object list and just add a ball
         objs.clear();
+
+        DotManager.getInstance().reset();
     }
 
     public ArrayList<GameObject> getObjs() {
