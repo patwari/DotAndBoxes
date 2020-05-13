@@ -10,10 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameInfra;
-import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.WorldData;
-import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
+import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.widgets.DebugRenderer;
 import com.mega.games.gamestartingkit.core.widgets.HUD;
 
@@ -50,7 +49,9 @@ public class PlayScreen implements Screen {
                 //Handle touch down input
                 if (GameObjectManager.getInstance().getObjs() != null) {
                     for (GameObject obj : GameObjectManager.getInstance().getObjs()) {
-                        obj.onTouchDown(x, y);
+                        if (obj.interactive) {
+                            obj.onTouchDown(x, y);
+                        }
                     }
                 }
                 return true;
@@ -61,7 +62,9 @@ public class PlayScreen implements Screen {
                 //Handle touch up input
                 if (GameObjectManager.getInstance().getObjs() != null) {
                     for (GameObject obj : GameObjectManager.getInstance().getObjs()) {
-                        obj.onTouchUp(x, y);
+                        if (obj.interactive) {
+                            obj.onTouchUp(x, y);
+                        }
                     }
                 }
             }
@@ -71,7 +74,9 @@ public class PlayScreen implements Screen {
                 //Handle touch dragged input
                 if (GameObjectManager.getInstance().getObjs() != null) {
                     for (GameObject obj : GameObjectManager.getInstance().getObjs()) {
-                        obj.onTouchDragged(x, y);
+                        if (obj.interactive) {
+                            obj.onTouchDragged(x, y);
+                        }
                     }
                 }
                 super.touchDragged(event, x, y, pointer);

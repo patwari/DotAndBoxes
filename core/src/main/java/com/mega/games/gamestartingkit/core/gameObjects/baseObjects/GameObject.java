@@ -10,6 +10,10 @@ public abstract class GameObject {
     private Vector2 size;
     private Color color;
     public boolean visible = true;
+    /**
+     * is the gameObject taking user input.
+     */
+    public boolean interactive = true;
 
     public GameObject() {
         //properties

@@ -1,12 +1,9 @@
 package com.mega.games.gamestartingkit.core.gameObjects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
-import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
+import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.BGController;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.DotManager;
-import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 
 import java.util.ArrayList;
 
@@ -45,7 +42,9 @@ public class GameObjectManager {
         BGController.getInstance().draw(batch);
         //automatically called every frame after update function
         for (GameObject obj : objs) {
-            obj.draw(batch);
+            if (obj.visible) {
+                obj.draw(batch);
+            }
         }
     }
 }
