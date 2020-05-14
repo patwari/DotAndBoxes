@@ -10,6 +10,7 @@ import java.util.Locale;
 public class DebugRenderer {
     private Label fpsLabel;
     private Label elapsedLabel;
+    private Label deltaLabel;
 
     private float elapsed;
     private float fpsElapsed;
@@ -24,6 +25,10 @@ public class DebugRenderer {
         elapsedLabel = new Label("Elapsed:0", GameAssetManager.getInstance().scoreLabelStyle);
         elapsedLabel.setPosition(0, GameData._virtualHeight - 2 * GameAssetManager.getInstance().scoreFontSize);
         elapsedLabel.setSize(GameData._virtualWidth, GameAssetManager.getInstance().scoreFontSize);
+
+        deltaLabel = new Label("Delta:0", GameAssetManager.getInstance().scoreLabelStyle);
+        deltaLabel.setPosition(0, GameData._virtualHeight - 3 * GameAssetManager.getInstance().scoreFontSize);
+        deltaLabel.setSize(GameData._virtualWidth, GameAssetManager.getInstance().scoreFontSize);
     }
 
     public void update(float dt) {
@@ -40,10 +45,12 @@ public class DebugRenderer {
 
         elapsed += dt;
         elapsedLabel.setText(String.format(Locale.US, "Elapsed : %d", (int) elapsed));
+        deltaLabel.setText(String.format(Locale.US, "Delta : %.2f ms", dt * 1000));
     }
 
     public void draw(Batch batch) {
         fpsLabel.draw(batch, 1);
         elapsedLabel.draw(batch, 1);
+        deltaLabel.draw(batch, 1);
     }
 }

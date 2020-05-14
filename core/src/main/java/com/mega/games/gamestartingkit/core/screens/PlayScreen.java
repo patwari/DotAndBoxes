@@ -147,9 +147,9 @@ public class PlayScreen implements Screen {
 //        hud.draw(batch);
         GameObjectManager.getInstance().draw(batch);
 
-//        if(GameData._debugMode) {
-//            debugRenderer.draw(batch);
-//        }
+        if (GameData._debugMode) {
+            debugRenderer.draw(batch);
+        }
         batch.end();
 
         stage.draw();
