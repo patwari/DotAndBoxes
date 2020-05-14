@@ -8,6 +8,8 @@ public class Constants {
     public static Color DOT_BORDER_COLOR = Color.RED;
     public static Color BOARD_BORDER_COLOR = Color.DARK_GRAY;
 
+    public static Color DOT_BORDER_HIGHLIGHT_COLOR = new Color(0xCC00CC);
+
     // always keep NUM_ROW <= NUM_COL
     public static int NUM_ROW = 3;
     public static int NUM_COL = 4;
