@@ -19,7 +19,7 @@ public class Circle extends GameObject {
     }
 
     public Circle(float radius, Color color) {
-        new Circle(radius, color, true);
+        this(radius, color, true);
     }
 
     public float getRadius() {

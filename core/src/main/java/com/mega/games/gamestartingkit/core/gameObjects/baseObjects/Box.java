@@ -17,7 +17,7 @@ public class Box extends GameObject {
     }
 
     public Box(float width, float height, Color color) {
-        new Box(width, height, color, true);
+        this(width, height, color, true);
     }
 
     public Vector2 getCenterPos() {
