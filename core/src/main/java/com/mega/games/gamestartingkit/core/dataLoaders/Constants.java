@@ -9,6 +9,8 @@ public class Constants {
     public static Color BOARD_BORDER_COLOR = Color.DARK_GRAY;
 
     public static Color DOT_BORDER_HIGHLIGHT_COLOR = new Color(0xCC00CC);
+    public static float[] DOT_BORDER_HIGHLIGHT_SIZE_F = new float[]{0.9f, 1.1f};
+    public static float DOT_BORDER_SCALE_SPEED_F = 0.6f;
 
     // always keep NUM_ROW <= NUM_COL
     public static int NUM_ROW = 3;

@@ -56,7 +56,11 @@ public abstract class GameObject {
 
     public abstract void onTouchDragged(float x, float y);
 
-    //update and draw functions
+    /**
+     * update and draw functions
+     *
+     * @param dt the delta time in ms. Elapsed time since last update.
+     */
     public abstract void update(float dt);
 
     public abstract void draw(Batch batch);

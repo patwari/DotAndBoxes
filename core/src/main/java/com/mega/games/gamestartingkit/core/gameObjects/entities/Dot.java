@@ -15,6 +15,8 @@ public class Dot extends Circle {
     private DotIndex index;
     private boolean isHighlighted = false;
     private boolean pendingUnhighlight = false;
+    private float borderRadF = 1;
+    private boolean isBorderIncrease = false;
 
     public Dot() {
         super(Constants.DOT_SIZE, Constants.DOT_COLOR);
@@ -50,13 +52,29 @@ public class Dot extends Circle {
         super.onTouchDragged(x, y);
     }
 
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+
+        if (isHighlighted) {
+            this.borderRadF += Constants.DOT_BORDER_SCALE_SPEED_F * dt * (isBorderIncrease ? 1 : -1);
+            if (this.borderRadF >= Constants.DOT_BORDER_HIGHLIGHT_SIZE_F[1]) {
+                this.isBorderIncrease = false;
+            } else if (this.borderRadF <= Constants.DOT_BORDER_HIGHLIGHT_SIZE_F[0]) {
+                this.isBorderIncrease = true;
+            }
+        }
+    }
+
     public void highlight() {
         this.setRadius(Constants.DOT_SIZE * 1.25f);
+        borderRadF = 1;
         this.isHighlighted = true;
     }
 
     public void unhighlight() {
         this.setRadius(Constants.DOT_SIZE);
+        borderRadF = 1;
         this.isHighlighted = false;
     }
 
@@ -72,11 +90,12 @@ public class Dot extends Circle {
     public void draw(Batch batch) {
         super.draw(batch);
 
-        batch.setColor(this.isHighlighted ? Constants.DOT_BORDER_HIGHLIGHT_COLOR : Constants.DOT_BORDER_COLOR);
         if (this.visible) {
-            batch.draw(border, getPos().x - getRadius(), getPos().y - getRadius(), 2 * getRadius(), 2 * getRadius());
+            batch.setColor(this.isHighlighted ? Constants.DOT_BORDER_HIGHLIGHT_COLOR : Constants.DOT_BORDER_COLOR);
+            float currBorderRad = getRadius() * borderRadF;
+            batch.draw(border, getPos().x - currBorderRad, getPos().y - currBorderRad, 2 * currBorderRad, 2 * currBorderRad);
+            batch.setColor(new Color(1, 1, 1, 1));
         }
-        batch.setColor(new Color(1, 1, 1, 1));
     }
 
 }
