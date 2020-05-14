@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.BGController;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.DotManager;
+import com.mega.games.gamestartingkit.core.gameObjects.entities.StageObject;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public class GameObjectManager {
         objs.clear();
 
         DotManager.getInstance().reset();
+        StageObject.getInstance().reset();
+        objs.add(StageObject.getInstance());
     }
 
     public ArrayList<GameObject> getObjs() {

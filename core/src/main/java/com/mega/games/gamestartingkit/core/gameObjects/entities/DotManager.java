@@ -9,6 +9,9 @@ import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * This class controls all Dots on the grid.
+ */
 public class DotManager {
 
     // set Singleton
@@ -17,6 +20,8 @@ public class DotManager {
     private Box outerBorder;
     private Box innerBorder;
     private HashSet<String> edges;
+    private DotIndex beginDot;
+    private DotIndex endDot;
     private DotIndex[] adjOffset = new DotIndex[]{
             new DotIndex(1, 0),     // top
             new DotIndex(0, 1),     // right
@@ -83,24 +88,45 @@ public class DotManager {
         this.edges.add(edgeString(row1, col1, row2, col2));
     }
 
-    public void highlightAdjascentDots(DotIndex selectedIndex) {
-        for (DotIndex offset : this.adjOffset) {
-            DotIndex targetIndex = new DotIndex(selectedIndex.row + offset.row, selectedIndex.col + offset.col);
-            if (targetIndex.row >= 0 && targetIndex.row <= Constants.NUM_ROW && targetIndex.col >= 0 && targetIndex.col <= Constants.NUM_COL) {
-                if (!isConnected(selectedIndex.row, selectedIndex.col, targetIndex.row, targetIndex.col)) {
-                    this.dots.get(targetIndex.row).get(targetIndex.col).highlight();
-                }
+    public void checkBeginDot(DotIndex idx) {
+        // check if any any edges is not connected.
+        boolean isBeginDot = false;
+        for (DotIndex adjDots : this.getAllAdjascentDots(idx)) {
+            if (!isConnected(idx.row, idx.col, adjDots.row, adjDots.col)) {
+                this.dots.get(adjDots.row).get(adjDots.col).highlight();
+                isBeginDot = true;
             }
+        }
+        if (isBeginDot) {
+            this.beginDot = idx;
+            this.dots.get(idx.row).get(idx.col).markAsBeginDot();
         }
     }
 
-    public void unhighlightAdjascentDots(DotIndex selectedIndex) {
+    public void resetDots() {
+        // TODO: check for boxComplete. If yes, mark the box.
+        if (beginDot != null) {
+            for (DotIndex adjDots : this.getAllAdjascentDots(beginDot)) {
+                this.dots.get(adjDots.row).get(adjDots.col).reset();
+            }
+            this.dots.get(beginDot.row).get(beginDot.col).reset();
+            beginDot = null;
+        }
+    }
+
+    public ArrayList<DotIndex> getAllAdjascentDots(DotIndex idx) {
+        ArrayList<DotIndex> adjDots = new ArrayList<>();
         for (DotIndex offset : this.adjOffset) {
-            DotIndex targetIndex = new DotIndex(selectedIndex.row + offset.row, selectedIndex.col + offset.col);
-            if (targetIndex.row >= 0 && targetIndex.row <= Constants.NUM_ROW && targetIndex.col >= 0 && targetIndex.col <= Constants.NUM_COL) {
-                this.dots.get(targetIndex.row).get(targetIndex.col).unhighlight();
+            DotIndex targetIndex = new DotIndex(idx.row + offset.row, idx.col + offset.col);
+            if (isValid(targetIndex)) {
+                adjDots.add(targetIndex);
             }
         }
+        return adjDots;
+    }
+
+    public boolean isValid(DotIndex idx) {
+        return idx.row >= 0 && idx.row <= Constants.NUM_ROW && idx.col >= 0 && idx.col <= Constants.NUM_COL;
     }
 
     public String edgeString(int a, int b, int c, int d) {
