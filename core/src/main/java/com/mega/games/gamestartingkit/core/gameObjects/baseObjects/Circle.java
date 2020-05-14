@@ -12,10 +12,14 @@ public class Circle extends GameObject {
 
     private float rad;
 
-    public Circle(float radius, Color color) {
-        currReg = GameAssetManager.getInstance().circle;
+    public Circle(float radius, Color color, boolean filled) {
+        currReg = filled ? GameAssetManager.getInstance().circle : GameAssetManager.getInstance().circleOutline;
         setRadius(radius);
         setColor(color);
+    }
+
+    public Circle(float radius, Color color) {
+        new Circle(radius, color, true);
     }
 
     public float getRadius() {
