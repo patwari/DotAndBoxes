@@ -147,8 +147,7 @@ public class DotManager {
 
     public void checkEndDot(float pointerX, float pointerY) {
         if (beginDot != null && snapDot != null) {
-            Dot snapDotDot = dots.get(snapDot.row).get(snapDot.col);
-            if (snapDotDot.getPos().dst2(pointerX, pointerY) < Math.pow(snapDotDot.getRadius() + Constants.DOT_SNAP_TOL, 2)) {
+            if (Dot.Contains(dots.get(snapDot.row).get(snapDot.col), pointerX, pointerY, Constants.DOT_SNAP_TOL)) {
                 connect(beginDot, snapDot);
                 Vector2 pos1 = dots.get(beginDot.row).get(beginDot.col).getPos();
                 Vector2 pos2 = dots.get(snapDot.row).get(snapDot.col).getPos();

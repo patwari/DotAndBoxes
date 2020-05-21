@@ -24,32 +24,16 @@ public class Dot extends Circle {
         border = GameAssetManager.getInstance().circleOutline;
     }
 
-    @Override
-    public void onTouchDown(float x, float y) {
-        super.onTouchDown(x, y);
-        if (this.isTouchWithin(x, y)) {
-            DotManager.getInstance().checkBeginDot(this.getIndex());
-        }
+    public static boolean Contains(Dot item, float x, float y, float tol) {
+        return item.getPos().dst2(x, y) < Math.pow(item.getRadius() + tol, 2);
     }
 
-    @Override
-    public void onTouchDragged(float x, float y) {
-        super.onTouchDragged(x, y);
-        if (isHighlighted && isTouchWithin(x, y, Constants.DOT_SNAP_TOL)) {
-            DotManager.getInstance().setSnapDot(index);
-        }
+    public static boolean Contains(Dot item, float x, float y) {
+        return Contains(item, x, y, 0);
     }
 
     public void markAsBeginDot() {
         this.setRadius(Constants.BEGIN_DOT_SIZE);
-    }
-
-    protected boolean isTouchWithin(float x, float y, float tol) {
-        return this.getPos().dst2(x, y) < Math.pow(this.getRadius() + tol, 2);
-    }
-
-    protected boolean isTouchWithin(float x, float y) {
-        return isTouchWithin(x, y, 0);
     }
 
     @Override
@@ -96,6 +80,22 @@ public class Dot extends Circle {
             float currBorderRad = getRadius() * borderRadF;
             batch.draw(border, getPos().x - currBorderRad, getPos().y - currBorderRad, 2 * currBorderRad, 2 * currBorderRad);
             batch.setColor(new Color(1, 1, 1, 1));
+        }
+    }
+
+    @Override
+    public void onTouchDown(float x, float y) {
+        super.onTouchDown(x, y);
+        if (Contains(this, x, y)) {
+            DotManager.getInstance().checkBeginDot(this.getIndex());
+        }
+    }
+
+    @Override
+    public void onTouchDragged(float x, float y) {
+        super.onTouchDragged(x, y);
+        if (isHighlighted && Contains(this, x, y, Constants.DOT_SNAP_TOL)) {
+            DotManager.getInstance().setSnapDot(index);
         }
     }
 
