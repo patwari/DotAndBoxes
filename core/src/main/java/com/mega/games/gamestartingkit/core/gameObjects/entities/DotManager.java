@@ -1,5 +1,6 @@
 package com.mega.games.gamestartingkit.core.gameObjects.entities;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
@@ -22,7 +23,6 @@ public class DotManager {
     private Box innerBorder;
     private HashSet<String> edges;
     private DotIndex beginDot;
-    private DotIndex endDot;
     private DotIndex snapDot;
 
     private DotIndex[] adjOffset = new DotIndex[]{
@@ -91,6 +91,10 @@ public class DotManager {
         this.edges.add(edgeString(row1, col1, row2, col2));
     }
 
+    public void connect(DotIndex begin, DotIndex end) {
+        connect(begin.row, begin.col, end.row, end.col);
+    }
+
     public void checkBeginDot(DotIndex idx) {
         // check if any any edges is not connected.
         boolean isBeginDot = false;
@@ -120,14 +124,14 @@ public class DotManager {
     }
 
     public void resetDots() {
-        // TODO: check for boxComplete. If yes, mark the box.
         if (beginDot != null) {
             for (DotIndex adjDots : this.getAllAdjacentDots(beginDot)) {
                 this.dots.get(adjDots.row).get(adjDots.col).reset();
             }
             this.dots.get(beginDot.row).get(beginDot.col).reset();
-            beginDot = null;
         }
+        beginDot = null;
+        snapDot = null;
     }
 
     public ArrayList<DotIndex> getAllAdjacentDots(DotIndex idx) {
@@ -139,6 +143,20 @@ public class DotManager {
             }
         }
         return adjDots;
+    }
+
+    public void checkEndDot(float pointerX, float pointerY) {
+        if (beginDot != null && snapDot != null) {
+            Dot snapDotDot = dots.get(snapDot.row).get(snapDot.col);
+            if (snapDotDot.getPos().dst2(pointerX, pointerY) < Math.pow(snapDotDot.getRadius() + Constants.DOT_SNAP_TOL, 2)) {
+                connect(beginDot, snapDot);
+                Vector2 pos1 = dots.get(beginDot.row).get(beginDot.col).getPos();
+                Vector2 pos2 = dots.get(snapDot.row).get(snapDot.col).getPos();
+                StageObject.getInstance().drawEdges(pos1.x, pos1.y, pos2.x, pos2.y);
+                // TODO: check for win.
+            }
+        }
+        resetDots();
     }
 
     public Box getInnerBorder() {

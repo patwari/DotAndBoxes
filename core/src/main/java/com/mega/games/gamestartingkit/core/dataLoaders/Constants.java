@@ -15,6 +15,8 @@ public class Constants {
     public static float[] DOT_BORDER_HIGHLIGHT_SIZE_F = new float[]{0.9f, 1.1f};
     public static float DOT_BORDER_SCALE_SPEED_F = 0.6f;
 
+    public static float EDGES_ALPHA = 0.6f;
+
     // always keep NUM_ROW <= NUM_COL
     public static int NUM_ROW = 3;
     public static int NUM_COL = 4;

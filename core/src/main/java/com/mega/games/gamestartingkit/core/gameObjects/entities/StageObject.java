@@ -14,6 +14,8 @@ import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 
+import java.util.ArrayList;
+
 /**
  * This is not a visible object. It is used to listen to input on entire screen.
  */
@@ -23,6 +25,7 @@ public class StageObject extends GameObject {
     public static final StageObject _myInstance = new StageObject();
     private Image lineGuide;
     private Vector2 beginDotPos;
+    private ArrayList<Image> edgeImages;
     /**
      * lineGuide should be larger than the begin dot, by a factor of x1.5
      */
@@ -37,17 +40,25 @@ public class StageObject extends GameObject {
 
     public void reset() {
         interactive = true;
-        if (lineGuide != null) {
+        initLineGuide();
+        if (edgeImages != null)
+            edgeImages.clear();
+        edgeImages = new ArrayList<>();
+
+        GameSoundManager.getInstance().playBG();
+        GameObjectManager.getInstance().getObjs().add(StageObject.getInstance());
+    }
+
+    public void initLineGuide() {
+        if (lineGuide != null)
             lineGuide.clear();
-        }
+
         Texture circle = GameAssetManager.getInstance().getTexture("lineGuide.png");
         int offset = 5;
         NinePatch roundRect = new NinePatch(circle, circle.getWidth() / 2 - offset, circle.getHeight() / 2 - offset, circle.getWidth() / 2 - offset, circle.getHeight() / 2 - offset);
         roundRect.scale(Constants.BEGIN_DOT_SIZE * 2 * lineGuideScaleF / roundRect.getTotalWidth(), Constants.BEGIN_DOT_SIZE * 2 * lineGuideScaleF / roundRect.getTotalHeight());
         lineGuide = new Image(roundRect);
         lineGuide.setVisible(false);
-        GameObjectManager.getInstance().getObjs().add(StageObject.getInstance());
-        GameSoundManager.getInstance().playBG();
     }
 
     @Override
@@ -58,7 +69,8 @@ public class StageObject extends GameObject {
     @Override
     public void onTouchUp(float x, float y) {
         if (beginDotPos != null) {
-            onInvalidEdge();
+            DotManager.getInstance().checkEndDot(x, y);
+            resetDots();
         }
     }
 
@@ -89,10 +101,23 @@ public class StageObject extends GameObject {
         lineGuide.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(pos.y - beginDotPos.y, pos.x - beginDotPos.x));
     }
 
-    public void onInvalidEdge() {
+    public void resetDots() {
         DotManager.getInstance().resetDots();
         lineGuide.setVisible(false);
         beginDotPos = null;
+    }
+
+    public void drawEdges(float x1, float y1, float x2, float y2) {
+        Texture edge = GameAssetManager.getInstance().getTexture("edge_ring.png");
+        int offset = 5;
+        NinePatch edgePatch = new NinePatch(edge, edge.getWidth() / 2 - offset, edge.getHeight() / 2 - offset, edge.getWidth() / 2 - offset, edge.getHeight() / 2 - offset);
+        edgePatch.scale(Constants.DOT_SIZE * 2 * lineGuideScaleF / edgePatch.getTotalWidth(), Constants.DOT_SIZE * 2 * lineGuideScaleF / edgePatch.getTotalHeight());
+        Image tempEdge = new Image(edgePatch);
+        tempEdge.setPosition(x1, y1, Align.center);
+        tempEdge.setOrigin(Align.center);
+        tempEdge.setWidth(Vector2.dst(x1, y1, x2, y2) + Constants.DOT_SIZE * 2 * lineGuideScaleF);
+        tempEdge.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(y2 - y1, x2 - x1));
+        edgeImages.add(tempEdge);
     }
 
     /**
@@ -125,6 +150,9 @@ public class StageObject extends GameObject {
 
     @Override
     public void draw(Batch batch) {
+        for (Image img : edgeImages) {
+            img.draw(batch, Constants.EDGES_ALPHA);
+        }
         if (lineGuide.isVisible()) {
             lineGuide.draw(batch, 1);
         }

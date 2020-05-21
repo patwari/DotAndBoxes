@@ -51,6 +51,7 @@ public class GameAssetManager {
         manager.load("texAtlas.txt", TextureAtlas.class);
         manager.load("game_bg.jpg", Texture.class);
         manager.load("lineGuide.png", Texture.class);
+        manager.load("edge_ring.png", Texture.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
