@@ -50,6 +50,7 @@ public class GameAssetManager {
         //load texture atlas
         manager.load("texAtlas.txt", TextureAtlas.class);
         manager.load("game_bg.jpg", Texture.class);
+        manager.load("lineGuide.png", Texture.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -78,5 +79,9 @@ public class GameAssetManager {
         circleOutline = atlas.findRegion("circle_line");
         square = atlas.findRegion("square_fill");
         squareOutline = atlas.findRegion("square_line");
+    }
+
+    public Texture getTexture(String name) {
+        return manager.get(name, Texture.class);
     }
 }

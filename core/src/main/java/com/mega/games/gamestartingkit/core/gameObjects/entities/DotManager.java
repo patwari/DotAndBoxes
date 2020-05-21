@@ -22,6 +22,8 @@ public class DotManager {
     private HashSet<String> edges;
     private DotIndex beginDot;
     private DotIndex endDot;
+    private DotIndex snapDot;
+
     private DotIndex[] adjOffset = new DotIndex[]{
             new DotIndex(1, 0),     // top
             new DotIndex(0, 1),     // right
@@ -99,7 +101,17 @@ public class DotManager {
         }
         if (isBeginDot) {
             this.beginDot = idx;
-            this.dots.get(idx.row).get(idx.col).markAsBeginDot();
+            Dot targetDot = this.dots.get(idx.row).get(idx.col);
+            targetDot.markAsBeginDot();
+            StageObject.getInstance().onSetBeginDot(targetDot.getPos());
+        }
+    }
+
+    public void setSnapDot(DotIndex idx) {
+        if (beginDot != null) {
+            snapDot = idx;
+            Dot targetDot = this.dots.get(idx.row).get(idx.col);
+            StageObject.getInstance().onSetSnapDot(targetDot.getPos());
         }
     }
 
@@ -123,6 +135,10 @@ public class DotManager {
             }
         }
         return adjDots;
+    }
+
+    public Box getInnerBorder() {
+        return innerBorder;
     }
 
     public boolean isValid(DotIndex idx) {

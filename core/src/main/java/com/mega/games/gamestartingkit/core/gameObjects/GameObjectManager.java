@@ -1,5 +1,7 @@
 package com.mega.games.gamestartingkit.core.gameObjects;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.BGController;
@@ -15,6 +17,7 @@ public class GameObjectManager {
 
     private GameObjectManager() {
         objs = new ArrayList<>();
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
     }
 
     public static GameObjectManager getInstance() {
@@ -25,9 +28,8 @@ public class GameObjectManager {
         //on reset, clear the object list and just add a ball
         objs.clear();
 
-        DotManager.getInstance().reset();
         StageObject.getInstance().reset();
-        objs.add(StageObject.getInstance());
+        DotManager.getInstance().reset();
     }
 
     public ArrayList<GameObject> getObjs() {

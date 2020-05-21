@@ -32,12 +32,24 @@ public class Dot extends Circle {
         }
     }
 
+    @Override
+    public void onTouchDragged(float x, float y) {
+        super.onTouchDragged(x, y);
+        if (isHighlighted && isTouchWithin(x, y, Constants.DOT_SNAP_TOL)) {
+            DotManager.getInstance().setSnapDot(index);
+        }
+    }
+
     public void markAsBeginDot() {
-        this.setRadius(Constants.DOT_SIZE * 1.5f);
+        this.setRadius(Constants.BEGIN_DOT_SIZE);
+    }
+
+    protected boolean isTouchWithin(float x, float y, float tol) {
+        return this.getPos().dst2(x, y) < Math.pow(this.getRadius() + tol, 2);
     }
 
     protected boolean isTouchWithin(float x, float y) {
-        return this.getPos().dst2(x, y) < Math.pow(this.getRadius(), 2);
+        return isTouchWithin(x, y, 0);
     }
 
     @Override
@@ -57,7 +69,7 @@ public class Dot extends Circle {
     public void highlight() {
         borderRadF = 1;
         this.isHighlighted = true;
-        this.setRadius(Constants.DOT_SIZE * 1.25f);
+        this.setRadius(Constants.ADJ_DOT_SIZE);
     }
 
     public DotIndex getIndex() {
