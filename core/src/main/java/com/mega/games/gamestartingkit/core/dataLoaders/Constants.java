@@ -3,6 +3,10 @@ package com.mega.games.gamestartingkit.core.dataLoaders;
 import com.badlogic.gdx.graphics.Color;
 
 public class Constants {
+    // always keep NUM_ROW <= NUM_COL
+    public static int NUM_ROW = 3;
+    public static int NUM_COL = 4;
+
     public static float DOT_SIZE = 15f;
     public static float BEGIN_DOT_SIZE = 22.5f;
     public static float ADJ_DOT_SIZE = 20.5f;
@@ -16,8 +20,4 @@ public class Constants {
     public static float DOT_BORDER_SCALE_SPEED_F = 0.6f;
 
     public static float EDGES_ALPHA = 0.6f;
-
-    // always keep NUM_ROW <= NUM_COL
-    public static int NUM_ROW = 3;
-    public static int NUM_COL = 4;
 }

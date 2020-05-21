@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
-import com.mega.games.gamestartingkit.core.dataLoaders.Values;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
 
@@ -66,9 +65,9 @@ public class DotManager {
         }
         dots = new ArrayList<>();
 
-        Values.BOX_SIZE = (innerBorder.getSize().x - 2 * Constants.DOT_SIZE) / Math.max(Constants.NUM_COL, Constants.NUM_ROW);
-        float offsetX = (GameData._virtualWidth - Constants.NUM_COL * Values.BOX_SIZE - Constants.DOT_SIZE * 2) * 0.5f;
-        float offsetY = (GameData._virtualHeight - Constants.NUM_ROW * Values.BOX_SIZE - Constants.DOT_SIZE * 2) * 0.5f;
+        float boxSize = (innerBorder.getSize().x - 2 * Constants.DOT_SIZE) / Math.max(Constants.NUM_COL, Constants.NUM_ROW);
+        float offsetX = (GameData._virtualWidth - Constants.NUM_COL * boxSize - Constants.DOT_SIZE * 2) * 0.5f;
+        float offsetY = (GameData._virtualHeight - Constants.NUM_ROW * boxSize - Constants.DOT_SIZE * 2) * 0.5f;
 
         for (int i = 0; i <= Constants.NUM_ROW; i++) {
             ArrayList<Dot> rowDots = new ArrayList<>();
@@ -76,7 +75,7 @@ public class DotManager {
                 Dot tempDot = new Dot();
                 tempDot.setIndex(i, j);
                 rowDots.add(tempDot);
-                tempDot.setPos(j * Values.BOX_SIZE + Constants.DOT_SIZE + offsetX, i * Values.BOX_SIZE + Constants.DOT_SIZE + offsetY);
+                tempDot.setPos(j * boxSize + Constants.DOT_SIZE + offsetX, i * boxSize + Constants.DOT_SIZE + offsetY);
                 GameObjectManager.getInstance().getObjs().add(tempDot);
             }
             dots.add(rowDots);
