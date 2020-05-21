@@ -2,6 +2,7 @@ package com.mega.games.gamestartingkit.core.gameObjects.entities;
 
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.Values;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
@@ -93,7 +94,7 @@ public class DotManager {
     public void checkBeginDot(DotIndex idx) {
         // check if any any edges is not connected.
         boolean isBeginDot = false;
-        for (DotIndex adjDots : this.getAllAdjascentDots(idx)) {
+        for (DotIndex adjDots : this.getAllAdjacentDots(idx)) {
             if (!isConnected(idx.row, idx.col, adjDots.row, adjDots.col)) {
                 this.dots.get(adjDots.row).get(adjDots.col).highlight();
                 isBeginDot = true;
@@ -109,7 +110,10 @@ public class DotManager {
 
     public void setSnapDot(DotIndex idx) {
         if (beginDot != null) {
-            snapDot = idx;
+            if (snapDot != idx) {
+                GameSoundManager.getInstance().playTap();
+                snapDot = idx;
+            }
             Dot targetDot = this.dots.get(idx.row).get(idx.col);
             StageObject.getInstance().onSetSnapDot(targetDot.getPos());
         }
@@ -118,7 +122,7 @@ public class DotManager {
     public void resetDots() {
         // TODO: check for boxComplete. If yes, mark the box.
         if (beginDot != null) {
-            for (DotIndex adjDots : this.getAllAdjascentDots(beginDot)) {
+            for (DotIndex adjDots : this.getAllAdjacentDots(beginDot)) {
                 this.dots.get(adjDots.row).get(adjDots.col).reset();
             }
             this.dots.get(beginDot.row).get(beginDot.col).reset();
@@ -126,7 +130,7 @@ public class DotManager {
         }
     }
 
-    public ArrayList<DotIndex> getAllAdjascentDots(DotIndex idx) {
+    public ArrayList<DotIndex> getAllAdjacentDots(DotIndex idx) {
         ArrayList<DotIndex> adjDots = new ArrayList<>();
         for (DotIndex offset : this.adjOffset) {
             DotIndex targetIndex = new DotIndex(idx.row + offset.row, idx.col + offset.col);

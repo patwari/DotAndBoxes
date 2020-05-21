@@ -31,19 +31,20 @@ public class GameSoundManager {
     }
 
     private void loadAssets() {
-        manager.load("sounds/bg.mp3", Music.class);
+        manager.load("sounds/music_POC.mp3", Music.class);
 
         manager.load("sounds/tap.mp3", Sound.class);
     }
 
     private void getAssets() {
-        bg = manager.get("sounds/bg.mp3", Music.class);
+        bg = manager.get("sounds/music_POC.mp3", Music.class);
         bg.setVolume(0.3f);
 
         tap = manager.get("sounds/tap.mp3", Sound.class);
     }
 
     public void playBG() {
+        bg.setLooping(true);
         bg.play();
     }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
@@ -46,6 +47,7 @@ public class StageObject extends GameObject {
         lineGuide = new Image(roundRect);
         lineGuide.setVisible(false);
         GameObjectManager.getInstance().getObjs().add(StageObject.getInstance());
+        GameSoundManager.getInstance().playBG();
     }
 
     @Override
