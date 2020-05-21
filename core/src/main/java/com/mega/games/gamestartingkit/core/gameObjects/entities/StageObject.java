@@ -81,8 +81,18 @@ public class StageObject extends GameObject {
             Vector2 newTouch = limitTouchToBorder(x, y, lineGuideBaseRad);
 
             if (lineGuide.isVisible() && beginDotPos != null) {
-                lineGuide.setWidth(beginDotPos.dst(newTouch) + lineGuideBaseRad * 2);
-                lineGuide.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(newTouch.y - beginDotPos.y, newTouch.x - beginDotPos.x));
+                if (DotManager.getInstance().getSnapDot() != null) {
+                    if (!Dot.Contains(DotManager.getInstance().getSnapDot(), x, y, Constants.DOT_SNAP_TOL)) {
+                        // if the pointer has moved far enough since last snap, then reset the snapDot, and re-position lineGuide using touchPos.
+                        DotManager.getInstance().resetSnapDot();
+                        lineGuide.setWidth(beginDotPos.dst(newTouch) + lineGuideBaseRad * 2);
+                        lineGuide.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(newTouch.y - beginDotPos.y, newTouch.x - beginDotPos.x));
+                    }
+                } else {
+                    // not snapped, so re-position lineGuide using touchPos.
+                    lineGuide.setWidth(beginDotPos.dst(newTouch) + lineGuideBaseRad * 2);
+                    lineGuide.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(newTouch.y - beginDotPos.y, newTouch.x - beginDotPos.x));
+                }
             }
         }
     }

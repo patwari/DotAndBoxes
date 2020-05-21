@@ -162,6 +162,16 @@ public class DotManager {
         return innerBorder;
     }
 
+    public Dot getSnapDot() {
+        if (snapDot == null)
+            return null;
+        return dots.get(snapDot.row).get(snapDot.col);
+    }
+
+    public void resetSnapDot() {
+        snapDot = null;
+    }
+
     public boolean isValid(DotIndex idx) {
         return idx.row >= 0 && idx.row <= Constants.NUM_ROW && idx.col >= 0 && idx.col <= Constants.NUM_COL;
     }

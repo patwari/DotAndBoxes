@@ -25,6 +25,8 @@ public class Dot extends Circle {
     }
 
     public static boolean Contains(Dot item, float x, float y, float tol) {
+        if (item == null)
+            return false;
         return item.getPos().dst2(x, y) < Math.pow(item.getRadius() + tol, 2);
     }
 
