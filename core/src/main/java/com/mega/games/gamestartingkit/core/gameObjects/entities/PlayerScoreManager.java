@@ -36,7 +36,7 @@ public class PlayerScoreManager {
         scoreLabels = new ArrayList<>();
     }
 
-    public static PlayerScoreManager GetInstance() {
+    public static PlayerScoreManager getInstance() {
         return _myInstance;
     }
 

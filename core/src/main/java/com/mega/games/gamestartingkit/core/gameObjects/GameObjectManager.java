@@ -31,7 +31,7 @@ public class GameObjectManager {
 
         StageObject.getInstance().reset();
         DotManager.getInstance().reset();
-        PlayerScoreManager.GetInstance().reset();
+        PlayerScoreManager.getInstance().reset();
     }
 
     public ArrayList<GameObject> getObjs() {
@@ -53,6 +53,6 @@ public class GameObjectManager {
                 obj.draw(batch);
             }
         }
-        PlayerScoreManager.GetInstance().draw(batch);
+        PlayerScoreManager.getInstance().draw(batch);
     }
 }

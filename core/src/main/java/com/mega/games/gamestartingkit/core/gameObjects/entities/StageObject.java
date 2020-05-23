@@ -1,8 +1,10 @@
 package com.mega.games.gamestartingkit.core.gameObjects.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,12 +29,17 @@ public class StageObject extends GameObject {
     private Image lineGuide;
     private Vector2 beginDotPos;
     private ArrayList<Image> edgeImages;
+    private ArrayList<float[]> boxColors;
+    private TextureAtlas.AtlasRegion boxTexture;
+
     /**
      * lineGuide should be larger than the begin dot, by a factor of x1.5
      */
     private float lineGuideScaleF = 1.5f;
 
     private StageObject() {
+        edgeImages = new ArrayList<>();
+        boxColors = new ArrayList<>();
     }
 
     public static StageObject getInstance() {
@@ -41,11 +48,13 @@ public class StageObject extends GameObject {
 
     public void reset() {
         interactive = true;
-        initLineGuide();
-        if (edgeImages != null)
-            edgeImages.clear();
+        edgeImages.clear();
         edgeImages = new ArrayList<>();
+        boxColors.clear();
+        boxColors = new ArrayList<>();
+        boxTexture = GameAssetManager.getInstance().square;
 
+        initLineGuide();
         GameSoundManager.getInstance().playBG();
         GameObjectManager.getInstance().getObjs().add(StageObject.getInstance());
     }
@@ -155,6 +164,11 @@ public class StageObject extends GameObject {
         return newTouchPos;
     }
 
+    public void colorBox(float x, float y, float w, float h, int playerIndex) {
+        boxColors.add(new float[]{x, y, w, h, playerIndex});
+    }
+
+
     @Override
     public void update(float dt) {
 
@@ -162,6 +176,11 @@ public class StageObject extends GameObject {
 
     @Override
     public void draw(Batch batch) {
+        for (float[] params : boxColors) {
+            batch.setColor(Constants.PLAYER_COLORS[(int) params[4]]);
+            batch.draw(boxTexture, params[0], params[1], params[2], params[3]);
+        }
+        batch.setColor(new Color(1, 1, 1, 1));
         for (Image img : edgeImages) {
             img.draw(batch, Constants.EDGES_ALPHA);
         }

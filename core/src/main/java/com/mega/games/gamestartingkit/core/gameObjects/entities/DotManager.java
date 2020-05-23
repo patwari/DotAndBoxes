@@ -19,12 +19,13 @@ public class DotManager {
     // set Singleton
     public static final DotManager _myInstance = new DotManager();
     public ArrayList<ArrayList<Dot>> dots;
+    protected float boxSize;
     private Box outerBorder;
     private Box innerBorder;
     private HashSet<String> edges;
+    private boolean[][] isBoxColored;
     private DotIndex beginDot;
     private DotIndex snapDot;
-
     private DotIndex[] adjOffset = new DotIndex[]{
             new DotIndex(1, 0),     // top
             new DotIndex(0, 1),     // right
@@ -40,12 +41,13 @@ public class DotManager {
     }
 
     public void reset() {
-        this.createBorders();
-        this.populateDots();
-        if (this.edges != null) {
-            this.edges.clear();
+        createBorders();
+        populateDots();
+        if (edges != null) {
+            edges.clear();
         }
-        this.edges = new HashSet<>();
+        edges = new HashSet<>();
+        isBoxColored = new boolean[Constants.NUM_ROW][Constants.NUM_COL];
     }
 
     protected void createBorders() {
@@ -66,7 +68,7 @@ public class DotManager {
         }
         dots = new ArrayList<>();
 
-        float boxSize = (innerBorder.getSize().x - 2 * Constants.DOT_SIZE) / Math.max(Constants.NUM_COL, Constants.NUM_ROW);
+        boxSize = (innerBorder.getSize().x - 2 * Constants.DOT_SIZE) / Math.max(Constants.NUM_COL, Constants.NUM_ROW);
         float offsetX = (GameData._virtualWidth - Constants.NUM_COL * boxSize - Constants.DOT_SIZE * 2) * 0.5f;
         float offsetY = (GameData._virtualHeight - Constants.NUM_ROW * boxSize - Constants.DOT_SIZE * 2) * 0.5f;
 
@@ -149,8 +151,52 @@ public class DotManager {
 
     // TODO: check for win.
     public void checkForWin(DotIndex beginDot, DotIndex endDot) {
-//        GameDataController.getInstance().addScoreToCurrPlayer();
-        GameDataController.getInstance().setToNextPlayer();
+        DotIndex firstBoxIdx = new DotIndex((beginDot.row + endDot.row) / 2, (beginDot.col + endDot.col) / 2);
+        DotIndex secondBoxIdx = new DotIndex(firstBoxIdx.row, firstBoxIdx.col);
+        if ((beginDot.row == endDot.row)) {
+            secondBoxIdx.row--;
+        } else {
+            secondBoxIdx.col--;
+        }
+        boolean anyBoxComplete = false;
+        if (checkBoxComplete(firstBoxIdx)) {
+            anyBoxComplete = true;
+        }
+        if (checkBoxComplete(secondBoxIdx)) {
+            anyBoxComplete = true;
+        }
+
+        if (!anyBoxComplete) {
+            GameDataController.getInstance().setToNextPlayer();
+        }
+    }
+
+    private boolean checkBoxComplete(DotIndex boxIdx) {
+        if (isValidBoxIdx(boxIdx)) {
+            if (isBoxComplete(boxIdx) && !isBoxColored[boxIdx.row][boxIdx.col]) {
+                Dot leftDownDot = dots.get(boxIdx.row).get(boxIdx.col);
+                StageObject.getInstance().colorBox(leftDownDot.getPos().x, leftDownDot.getPos().y, boxSize, boxSize, GameDataController.getInstance().getCurrPlayerIndex());
+                isBoxColored[boxIdx.row][boxIdx.col] = true;
+                GameDataController.getInstance().addScoreToCurrPlayer();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isBoxComplete(DotIndex firstBoxIdx) {
+        int row = firstBoxIdx.row, col = firstBoxIdx.col;
+        if (!isConnected(row, col, row + 1, col)) {  // left side.
+            return false;
+        }
+        if (!isConnected(row, col, row, col + 1)) {   // bottom side.
+            return false;
+        }
+        if (!isConnected(row + 1, col, row + 1, col + 1)) {   // top side.
+            return false;
+        }
+        // right side.
+        return isConnected(row, col + 1, row + 1, col + 1);
     }
 
     public Box getInnerBorder() {
@@ -184,6 +230,10 @@ public class DotManager {
 
     public boolean isValid(DotIndex idx) {
         return idx.row >= 0 && idx.row <= Constants.NUM_ROW && idx.col >= 0 && idx.col <= Constants.NUM_COL;
+    }
+
+    public boolean isValidBoxIdx(DotIndex idx) {
+        return idx.row >= 0 && idx.row < Constants.NUM_ROW && idx.col >= 0 && idx.col < Constants.NUM_COL;
     }
 
     public String edgeString(int a, int b, int c, int d) {

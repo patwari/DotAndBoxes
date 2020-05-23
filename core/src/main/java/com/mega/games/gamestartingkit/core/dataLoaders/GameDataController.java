@@ -14,6 +14,7 @@ public class GameDataController {
     private String configError;
     private MegaServices megaServices;
     private GameData data = GameData.getInstance();
+    private int totalScore;
 
     private GameDataController() {
     }
@@ -72,11 +73,17 @@ public class GameDataController {
             data.scores[i] = 0;
         }
         resetPlayerIndex();
+        totalScore = 0;
     }
 
     public void addScoreToCurrPlayer(int val) {
         data.scores[data.currPlayerIdx] += val;
-        PlayerScoreManager.GetInstance().onScoreUpdate();
+        PlayerScoreManager.getInstance().onScoreUpdate();
+        totalScore += val;
+        if (totalScore >= Constants.NUM_COL * Constants.NUM_ROW) {
+            setGameOver();
+            setGameEnded();
+        }
     }
 
     public void addScoreToCurrPlayer() {
@@ -88,7 +95,7 @@ public class GameDataController {
         if (data.currPlayerIdx >= Constants.PLAYERS_COUNT) {
             data.currPlayerIdx = 0;
         }
-        PlayerScoreManager.GetInstance().onPlayerChange();
+        PlayerScoreManager.getInstance().onPlayerChange();
     }
 
     public int getCurrPlayerIndex() {
