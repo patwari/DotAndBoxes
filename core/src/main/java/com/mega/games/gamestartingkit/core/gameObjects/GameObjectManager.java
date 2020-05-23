@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.BGController;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.DotManager;
+import com.mega.games.gamestartingkit.core.gameObjects.entities.PlayerScoreManager;
 import com.mega.games.gamestartingkit.core.gameObjects.entities.StageObject;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GameObjectManager {
 
         StageObject.getInstance().reset();
         DotManager.getInstance().reset();
+        PlayerScoreManager.GetInstance().reset();
     }
 
     public ArrayList<GameObject> getObjs() {
@@ -51,5 +53,6 @@ public class GameObjectManager {
                 obj.draw(batch);
             }
         }
+        PlayerScoreManager.GetInstance().draw(batch);
     }
 }

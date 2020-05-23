@@ -52,6 +52,8 @@ public class GameAssetManager {
         manager.load("game_bg.jpg", Texture.class);
         manager.load("lineGuide.png", Texture.class);
         manager.load("edge_ring.png", Texture.class);
+        manager.load("playerIcon.png", Texture.class);
+        manager.load("playerBG.png", Texture.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -84,5 +86,12 @@ public class GameAssetManager {
 
     public Texture getTexture(String name) {
         return manager.get(name, Texture.class);
+    }
+
+    public Label.LabelStyle getLabelStyle(String font, Color color) {
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = manager.get(font, BitmapFont.class);
+        style.fontColor = color;
+        return style;
     }
 }

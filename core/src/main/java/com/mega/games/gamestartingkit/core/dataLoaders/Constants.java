@@ -20,4 +20,10 @@ public class Constants {
     public static float DOT_BORDER_SCALE_SPEED_F = 0.6f;
 
     public static float EDGES_ALPHA = 0.6f;
+
+    // max 4 players supported.
+    public static int PLAYERS_COUNT = 2;
+    public static Color[] PLAYER_COLORS = new Color[]{Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};
+    public static float PLAYER_ICON_H = 40;
+    public static float PLAYER_ICON_BG_H = 60;
 }

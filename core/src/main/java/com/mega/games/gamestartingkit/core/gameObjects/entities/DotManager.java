@@ -161,6 +161,10 @@ public class DotManager {
         return innerBorder;
     }
 
+    public Box getOuterBorder() {
+        return outerBorder;
+    }
+
     public Dot getSnapDot() {
         if (snapDot == null)
             return null;
