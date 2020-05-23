@@ -105,7 +105,6 @@ public class GameDataController {
 
     public void resetPlayerIndex() {
         data.currPlayerIdx = 0;
-        PlayerScoreManager.GetInstance().onPlayerChange();
     }
 
     public boolean getIsGameEnded() {

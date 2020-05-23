@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.mega.games.support.MegaServices;
 
 public class GameAssetManager {
@@ -22,9 +23,10 @@ public class GameAssetManager {
     public AtlasRegion circleOutline;
     public AtlasRegion square;
     public AtlasRegion squareOutline;
+    public Texture game_bg;
     private AssetManager manager;
     private TextureAtlas atlas;
-    public Texture game_bg;
+    private TextureAtlas dinoAtlas;
 
     private GameAssetManager() {
     }
@@ -49,6 +51,7 @@ public class GameAssetManager {
     private void loadAssets() {
         //load texture atlas
         manager.load("texAtlas.txt", TextureAtlas.class);
+        manager.load("Animations/dino.txt", TextureAtlas.class);
         manager.load("game_bg.jpg", Texture.class);
         manager.load("lineGuide.png", Texture.class);
         manager.load("edge_ring.png", Texture.class);
@@ -75,6 +78,7 @@ public class GameAssetManager {
 
         //Textures
         atlas = manager.get("texAtlas.txt", TextureAtlas.class);
+        dinoAtlas = manager.get("Animations/dino.txt", TextureAtlas.class);
         game_bg = manager.get("game_bg.jpg", Texture.class);
 
         //particles
@@ -82,6 +86,8 @@ public class GameAssetManager {
         circleOutline = atlas.findRegion("circle_line");
         square = atlas.findRegion("square_fill");
         squareOutline = atlas.findRegion("square_line");
+
+        Array<TextureAtlas.AtlasRegion> reg = dinoAtlas.getRegions();
     }
 
     public Texture getTexture(String name) {
@@ -93,5 +99,14 @@ public class GameAssetManager {
         style.font = manager.get(font, BitmapFont.class);
         style.fontColor = color;
         return style;
+    }
+
+    public Array<AtlasRegion> getDinoTextures() {
+        String[] parts = new String[]{"Idle", "Walk", "Run", "Jump"};
+        Array<AtlasRegion> allTextures = new Array<>();
+        for (String action : parts) {
+            allTextures.addAll(dinoAtlas.findRegions(action));
+        }
+        return allTextures;
     }
 }

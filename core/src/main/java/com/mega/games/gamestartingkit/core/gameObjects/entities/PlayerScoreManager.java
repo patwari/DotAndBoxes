@@ -1,8 +1,11 @@
 package com.mega.games.gamestartingkit.core.gameObjects.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -20,6 +23,12 @@ public class PlayerScoreManager {
     private ArrayList<Image> iconsBG;
     private ArrayList<Image> playerIcons;
     private ArrayList<Label> scoreLabels;
+    private Animation<TextureRegion> dinoAnim;
+    private float stateTime = 0;
+    /**
+     * Store dino anim transform info. [x, y, w, h]
+     */
+    private float[] dinoTransform;
 
     private PlayerScoreManager() {
         iconsBG = new ArrayList<>();
@@ -39,11 +48,14 @@ public class PlayerScoreManager {
 
     public void onPlayerChange() {
         int currIndex = GameDataController.getInstance().getCurrPlayerIndex();
-        // TODO: write animation logic.
+        Image currPlayerIcon = playerIcons.get(currIndex);
+        dinoTransform[0] = currPlayerIcon.getX() + ((currIndex % 2 == 0) ? 80 : -80);
+        dinoTransform[1] = currPlayerIcon.getY() - 10f;
     }
 
     public void reset() {
         createElements();
+        onPlayerChange();
     }
 
     protected void createElements() {
@@ -76,7 +88,6 @@ public class PlayerScoreManager {
             iconBG.setOriginY(Constants.PLAYER_ICON_BG_H / 2);
             iconBG.setColor(Constants.PLAYER_COLORS[i]);
             iconBG.setSize(iconBGW, Constants.PLAYER_ICON_BG_H);
-//            icon.setColor(Constants.PLAYER_COLORS[i]);
             icon.setSize(iconW, iconH);
             label.setSize(labelW, iconH);
 
@@ -101,8 +112,9 @@ public class PlayerScoreManager {
             playerIcons.add(icon);
             scoreLabels.add(label);
         }
+        dinoAnim = new Animation<TextureRegion>(0.1f, GameAssetManager.getInstance().getDinoTextures(), Animation.PlayMode.LOOP);
+        dinoTransform = new float[]{0, 0, iconW * 1.5f, iconH * 1.5f};
     }
-
 
     public void draw(Batch batch) {
         for (Image img : iconsBG) {
@@ -114,6 +126,12 @@ public class PlayerScoreManager {
         for (Label lbl : scoreLabels) {
             lbl.draw(batch, 1);
         }
+        if (dinoTransform != null) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            TextureRegion currentFrame = dinoAnim.getKeyFrame(stateTime, true);
+            batch.draw(currentFrame, dinoTransform[0], dinoTransform[1], dinoTransform[2], dinoTransform[3]);
+        }
     }
 
 }
+
