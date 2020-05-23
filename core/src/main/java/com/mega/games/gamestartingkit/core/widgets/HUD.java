@@ -18,9 +18,9 @@ public class HUD {
 
     public void update(float dt) {
         //increase score by 1 every second
-        GameData.getInstance().score += dt;
-
-        scoreLabel.setText(Long.toString((long) GameData.getInstance().score));
+//        GameData.getInstance().score += dt;
+//
+//        scoreLabel.setText(Long.toString((long) GameData.getInstance().score));
     }
 
     public void draw(Batch batch) {

@@ -1,6 +1,7 @@
 package com.mega.games.gamestartingkit.core.dataLoaders;
 
 import com.badlogic.gdx.Gdx;
+import com.mega.games.gamestartingkit.core.gameObjects.entities.PlayerScoreManager;
 import com.mega.games.support.MegaServices;
 
 import java.util.HashMap;
@@ -65,8 +66,33 @@ public class GameDataController {
 
     public void setDefault() {
         data.elapsed = 0;
-        data.score = 0;
         data.gameEndLag = 5;
+        data.scores = new int[Constants.PLAYERS_COUNT];
+        for (int i = 0; i < Constants.PLAYERS_COUNT; i++) {
+            data.scores[i] = 0;
+        }
+        resetPlayerIndex();
+    }
+
+    public void addScoreToCurrPlayer(int val) {
+        data.scores[data.currPlayerIdx] += val;
+        PlayerScoreManager.GetInstance().onScoreUpdate();
+    }
+
+    public void addScoreToCurrPlayer() {
+        addScoreToCurrPlayer(1);
+    }
+
+    public void setToNextPlayer() {
+        data.currPlayerIdx++;
+        if (data.currPlayerIdx >= Constants.PLAYERS_COUNT) {
+            data.currPlayerIdx = 0;
+        }
+        PlayerScoreManager.GetInstance().onPlayerChange();
+    }
+
+    public int getCurrPlayerIndex() {
+        return data.currPlayerIdx;
     }
 
     public void setGameEnded() {
@@ -75,6 +101,11 @@ public class GameDataController {
             Gdx.input.setInputProcessor(null);
             megaServices.analytics().logEvent("Death", getGameState());
         }
+    }
+
+    public void resetPlayerIndex() {
+        data.currPlayerIdx = 0;
+        PlayerScoreManager.GetInstance().onPlayerChange();
     }
 
     public boolean getIsGameEnded() {
@@ -94,7 +125,11 @@ public class GameDataController {
         if (!data.isGameOver) {
             data.isGameEnded = true;
             data.isGameOver = true;
-            megaServices.callbacks().gameOver((long) data.score);
+            int maxScore = 0;
+            for (int i = 0; i < Constants.PLAYERS_COUNT; i++) {
+                maxScore += data.scores[i];
+            }
+            megaServices.callbacks().gameOver(maxScore);
         }
     }
 

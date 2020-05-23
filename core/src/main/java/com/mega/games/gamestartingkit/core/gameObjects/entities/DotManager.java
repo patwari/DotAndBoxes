@@ -3,6 +3,7 @@ package com.mega.games.gamestartingkit.core.gameObjects.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
@@ -111,17 +112,6 @@ public class DotManager {
         }
     }
 
-    public void setSnapDot(DotIndex idx) {
-        if (beginDot != null) {
-            if (snapDot != idx) {
-                GameSoundManager.getInstance().playTap();
-                snapDot = idx;
-            }
-            Dot targetDot = this.dots.get(idx.row).get(idx.col);
-            StageObject.getInstance().onSetSnapDot(targetDot.getPos());
-        }
-    }
-
     public void resetDots() {
         if (beginDot != null) {
             for (DotIndex adjDots : this.getAllAdjacentDots(beginDot)) {
@@ -151,10 +141,16 @@ public class DotManager {
                 Vector2 pos1 = dots.get(beginDot.row).get(beginDot.col).getPos();
                 Vector2 pos2 = dots.get(snapDot.row).get(snapDot.col).getPos();
                 StageObject.getInstance().drawEdges(pos1.x, pos1.y, pos2.x, pos2.y);
-                // TODO: check for win.
+                checkForWin(beginDot, snapDot);
             }
         }
         resetDots();
+    }
+
+    // TODO: check for win.
+    public void checkForWin(DotIndex beginDot, DotIndex endDot) {
+//        GameDataController.getInstance().addScoreToCurrPlayer();
+        GameDataController.getInstance().setToNextPlayer();
     }
 
     public Box getInnerBorder() {
@@ -169,6 +165,17 @@ public class DotManager {
         if (snapDot == null)
             return null;
         return dots.get(snapDot.row).get(snapDot.col);
+    }
+
+    public void setSnapDot(DotIndex idx) {
+        if (beginDot != null) {
+            if (snapDot != idx) {
+                GameSoundManager.getInstance().playTap();
+                snapDot = idx;
+            }
+            Dot targetDot = this.dots.get(idx.row).get(idx.col);
+            StageObject.getInstance().onSetSnapDot(targetDot.getPos());
+        }
     }
 
     public void resetSnapDot() {

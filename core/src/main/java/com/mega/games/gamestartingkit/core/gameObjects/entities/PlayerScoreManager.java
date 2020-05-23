@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.support.MegaServices;
 
 import java.util.ArrayList;
@@ -28,6 +29,17 @@ public class PlayerScoreManager {
 
     public static PlayerScoreManager GetInstance() {
         return _myInstance;
+    }
+
+    public void onScoreUpdate() {
+        for (int i = 0; i < Constants.PLAYERS_COUNT; i++) {
+            scoreLabels.get(i).setText(GameData.getInstance().scores[i]);
+        }
+    }
+
+    public void onPlayerChange() {
+        int currIndex = GameDataController.getInstance().getCurrPlayerIndex();
+        // TODO: write animation logic.
     }
 
     public void reset() {
@@ -59,11 +71,12 @@ public class PlayerScoreManager {
         for (int i = 0; i < Constants.PLAYERS_COUNT; i++) {
             Image iconBG = new Image(iconBGTexture);
             Image icon = new Image(iconTexture);
-            Label label = new Label("5", labelStyle);
+            Label label = new Label("0", labelStyle);
 
             iconBG.setOriginY(Constants.PLAYER_ICON_BG_H / 2);
             iconBG.setColor(Constants.PLAYER_COLORS[i]);
             iconBG.setSize(iconBGW, Constants.PLAYER_ICON_BG_H);
+//            icon.setColor(Constants.PLAYER_COLORS[i]);
             icon.setSize(iconW, iconH);
             label.setSize(labelW, iconH);
 

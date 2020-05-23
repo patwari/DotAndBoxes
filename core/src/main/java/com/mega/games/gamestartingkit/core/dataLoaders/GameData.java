@@ -14,13 +14,13 @@ public class GameData {
     public boolean isGameOver;
     public float gameEndLag;
     public float elapsed;
-
+    public int[] scores;
     //Game Specific Data (Mostly Config Driven)
-    //Todo: Define Game Specific Data
-    public float score;
     public Vector2 screenCenter = new Vector2(_virtualWidth / 2f, _virtualHeight / 2f);
+    public int currPlayerIdx;
 
     private GameData() {
+        scores = new int[Constants.PLAYERS_COUNT];
     }
 
     public static GameData getInstance() {

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.Box;
@@ -127,6 +128,7 @@ public class StageObject extends GameObject {
         tempEdge.setOrigin(Align.center);
         tempEdge.setWidth(Vector2.dst(x1, y1, x2, y2) + Constants.DOT_SIZE * 2 * lineGuideScaleF);
         tempEdge.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(y2 - y1, x2 - x1));
+        tempEdge.setColor(Constants.PLAYER_COLORS[GameDataController.getInstance().getCurrPlayerIndex()]);
         edgeImages.add(tempEdge);
     }
 
