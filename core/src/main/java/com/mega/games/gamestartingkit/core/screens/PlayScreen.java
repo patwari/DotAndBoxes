@@ -9,14 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameInfra;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameSoundManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.WorldData;
 import com.mega.games.gamestartingkit.core.gameObjects.GameObjectManager;
 import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
@@ -35,6 +40,8 @@ public class PlayScreen implements Screen {
     private DebugRenderer debugRenderer;
     private HUD hud;
     private Stage stage;
+    private ImageButton soundButton;
+
 
     public PlayScreen() {
         valuesInitialized = false;
@@ -48,6 +55,28 @@ public class PlayScreen implements Screen {
         GameDataController.getInstance().startGame();
 
         initConfigScreen();
+        initSoundButton();
+    }
+
+    private void initSoundButton() {
+        Drawable soundOnDrawable = new TextureRegionDrawable(GameAssetManager.getInstance().soundOn);
+        Drawable soundOffDrawable = new TextureRegionDrawable(GameAssetManager.getInstance().soundOff);
+        soundButton = new ImageButton(soundOnDrawable, soundOnDrawable, soundOffDrawable);
+        soundButton.setPosition(GameData._virtualWidth, GameData._virtualHeight, Align.topRight);
+        stage.addActor(soundButton);
+    }
+
+    /**
+     * Manually handle the sound button pressup event. There is some issues when InputHandler is attached directly to the soundButton.
+     */
+    public void checkSoundButtonClick(float x, float y) {
+        if (x >= soundButton.getX() && x <= soundButton.getX() + soundButton.getWidth() && y >= soundButton.getY() && y <= soundButton.getY() + soundButton.getHeight()) {
+            if (soundButton.isChecked()) {
+                GameSoundManager.getInstance().mute();
+            } else {
+                GameSoundManager.getInstance().unmute();
+            }
+        }
     }
 
     public void initConfigScreen() {
@@ -111,7 +140,6 @@ public class PlayScreen implements Screen {
         dialog.button("Ok", "OK");
 
         stage.addActor(dialog);
-        Gdx.input.setInputProcessor(stage);
     }
 
     private void addUIListeners() {
@@ -139,6 +167,8 @@ public class PlayScreen implements Screen {
                         }
                     }
                 }
+
+                checkSoundButtonClick(x, y);
             }
 
             @Override

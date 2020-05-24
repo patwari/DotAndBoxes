@@ -26,6 +26,8 @@ public class GameAssetManager {
     public AtlasRegion squareOutline;
     public Texture game_bg;
     public Skin glassySkin;
+    public Texture soundOn;
+    public Texture soundOff;
     private AssetManager manager;
     private TextureAtlas atlas;
     private TextureAtlas dinoAtlas;
@@ -60,6 +62,8 @@ public class GameAssetManager {
         manager.load("playerIcon.png", Texture.class);
         manager.load("playerBG.png", Texture.class);
         manager.load("Skin/glassy-ui.json", Skin.class);
+        manager.load("soundOn.png", Texture.class);
+        manager.load("soundOff.png", Texture.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -83,6 +87,8 @@ public class GameAssetManager {
         atlas = manager.get("texAtlas.txt", TextureAtlas.class);
         dinoAtlas = manager.get("Animations/dino.txt", TextureAtlas.class);
         game_bg = manager.get("game_bg.jpg", Texture.class);
+        soundOn = manager.get("soundOn.png", Texture.class);
+        soundOff = manager.get("soundOff.png", Texture.class);
 
         //particles
         circle = atlas.findRegion("circle_fill");

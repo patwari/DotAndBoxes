@@ -20,7 +20,7 @@ import com.mega.games.gamestartingkit.core.gameObjects.baseObjects.GameObject;
 import java.util.ArrayList;
 
 /**
- * This is not a visible object. It is used to listen to input on entire screen.
+ * This is an object that holds game generic elements, which aren't part of any specific group.
  */
 public class StageObject extends GameObject {
 

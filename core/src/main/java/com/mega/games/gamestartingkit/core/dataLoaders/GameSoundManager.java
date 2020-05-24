@@ -12,6 +12,7 @@ public class GameSoundManager {
     private Music bg;
     //Sfx
     private Sound tap;
+    private boolean mute;
 
     private GameSoundManager() {
     }
@@ -28,18 +29,16 @@ public class GameSoundManager {
         manager.finishLoading();
 
         getAssets();
+        unmute();
     }
 
     private void loadAssets() {
-        manager.load("sounds/music_clearday.mp3", Music.class);
-
+        manager.load("sounds/music.mp3", Music.class);
         manager.load("sounds/tap.mp3", Sound.class);
     }
 
     private void getAssets() {
-        bg = manager.get("sounds/music_clearday.mp3", Music.class);
-        bg.setVolume(0.3f);
-
+        bg = manager.get("sounds/music.mp3", Music.class);
         tap = manager.get("sounds/tap.mp3", Sound.class);
     }
 
@@ -48,11 +47,21 @@ public class GameSoundManager {
         bg.play();
     }
 
-    public void stopBG() {
-        bg.stop();
+    public void mute() {
+        bg.setVolume(0);
+        mute = true;
+    }
+
+    public void unmute() {
+        bg.setVolume(0.3f);
+        mute = false;
+    }
+
+    public boolean isMute() {
+        return mute;
     }
 
     public void playTap() {
-        tap.play();
+        tap.play(mute ? 0 : 1);
     }
 }
