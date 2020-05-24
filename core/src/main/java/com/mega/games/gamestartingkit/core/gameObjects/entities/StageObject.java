@@ -131,11 +131,11 @@ public class StageObject extends GameObject {
         Texture edge = GameAssetManager.getInstance().getTexture("edge_ring.png");
         int offset = 5;
         NinePatch edgePatch = new NinePatch(edge, edge.getWidth() / 2 - offset, edge.getHeight() / 2 - offset, edge.getWidth() / 2 - offset, edge.getHeight() / 2 - offset);
-        edgePatch.scale(Constants.DOT_SIZE * 2 * lineGuideScaleF / edgePatch.getTotalWidth(), Constants.DOT_SIZE * 2 * lineGuideScaleF / edgePatch.getTotalHeight());
+        edgePatch.scale(Constants.DOT_SIZE * 2 * Constants.EDGE_SIZE_F / edgePatch.getTotalWidth(), Constants.DOT_SIZE * 2 / edgePatch.getTotalHeight());
         Image tempEdge = new Image(edgePatch);
         tempEdge.setPosition(x1, y1, Align.center);
         tempEdge.setOrigin(Align.center);
-        tempEdge.setWidth(Vector2.dst(x1, y1, x2, y2) + Constants.DOT_SIZE * 2 * lineGuideScaleF);
+        tempEdge.setWidth(Vector2.dst(x1, y1, x2, y2) + Constants.DOT_SIZE * 2 * Constants.EDGE_SIZE_F);
         tempEdge.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(y2 - y1, x2 - x1));
         tempEdge.setColor(Constants.PLAYER_COLORS[GameDataController.getInstance().getCurrPlayerIndex()]);
         edgeImages.add(tempEdge);
