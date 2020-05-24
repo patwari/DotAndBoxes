@@ -20,7 +20,6 @@ public class GameData {
     public int currPlayerIdx;
 
     private GameData() {
-        scores = new int[Constants.PLAYERS_COUNT];
     }
 
     public static GameData getInstance() {

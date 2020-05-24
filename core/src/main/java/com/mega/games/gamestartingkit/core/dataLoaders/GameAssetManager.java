@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mega.games.support.MegaServices;
 
@@ -24,6 +25,7 @@ public class GameAssetManager {
     public AtlasRegion square;
     public AtlasRegion squareOutline;
     public Texture game_bg;
+    public Skin glassySkin;
     private AssetManager manager;
     private TextureAtlas atlas;
     private TextureAtlas dinoAtlas;
@@ -57,6 +59,7 @@ public class GameAssetManager {
         manager.load("edge_ring.png", Texture.class);
         manager.load("playerIcon.png", Texture.class);
         manager.load("playerBG.png", Texture.class);
+        manager.load("Skin/glassy-ui.json", Skin.class);
 
         //load font data
         FreetypeFontLoader.FreeTypeFontLoaderParameter scoreFontLoader = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -86,6 +89,7 @@ public class GameAssetManager {
         circleOutline = atlas.findRegion("circle_line");
         square = atlas.findRegion("square_fill");
         squareOutline = atlas.findRegion("square_line");
+        glassySkin = manager.get("Skin/glassy-ui.json", Skin.class);
 
         Array<TextureAtlas.AtlasRegion> reg = dinoAtlas.getRegions();
     }

@@ -7,6 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
+import com.mega.games.gamestartingkit.core.dataLoaders.Constants;
+import com.mega.games.gamestartingkit.core.dataLoaders.GameAssetManager;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameData;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameDataController;
 import com.mega.games.gamestartingkit.core.dataLoaders.GameInfra;
@@ -18,6 +25,7 @@ import com.mega.games.gamestartingkit.core.widgets.HUD;
 
 public class PlayScreen implements Screen {
     public boolean valuesInitialized;
+    private boolean configSelected;
     /*
     first frame takes time to load due to async asset loading. This causes
     a large update delta, so skip it.
@@ -30,16 +38,80 @@ public class PlayScreen implements Screen {
 
     public PlayScreen() {
         valuesInitialized = false;
+        configSelected = false;
         debugRenderer = new DebugRenderer();
-
         hud = new HUD();
 
         stage = new Stage(GameInfra.getInstance().viewport, GameInfra.getInstance().batch);
         Gdx.input.setInputProcessor(stage);
-
         addUIListeners();
-
         GameDataController.getInstance().startGame();
+
+        initConfigScreen();
+    }
+
+    public void initConfigScreen() {
+        Skin skin = GameAssetManager.getInstance().glassySkin;
+        Dialog dialog = new Dialog("Settings", skin) {
+            @Override
+            public void result(Object obj) {
+                Array<Cell> cells = getContentTable().getCells();
+                int tableRows = getContentTable().getRows();
+                int tableCols = getContentTable().getColumns();
+
+                for (int i = 0; i < tableRows; i++) {
+                    Cell cell = cells.get(i * tableCols + 1);
+                    int val = ((SelectBox<Integer>) cell.getActor()).getSelected().intValue();
+                    switch (cell.getActor().getName()) {
+                        case "players":
+                            Constants.PLAYERS_COUNT = val;
+                            break;
+                        case "rows":
+                            Constants.NUM_ROW = val;
+                            break;
+                        case "cols":
+                            Constants.NUM_COL = val;
+                            break;
+                    }
+                }
+                configSelected = true;
+            }
+        };
+        float w = 300;
+        float h = 500;
+        dialog.setSize(w, h);
+        dialog.setPosition(Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() / 2 - 100);
+        dialog.setScale(200f / w);
+
+        final SelectBox<Integer> playersCountBox = new SelectBox<>(skin);
+        playersCountBox.setName("players");
+        playersCountBox.setSelected(2);
+        playersCountBox.setItems(2, 3, 4);
+
+        final SelectBox<Integer> numRowsBox = new SelectBox<>(skin);
+        numRowsBox.setName("rows");
+        numRowsBox.setSelected(3);
+        numRowsBox.setItems(3, 4, 5, 6);
+
+        final SelectBox<Integer> numColsBox = new SelectBox<>(skin);
+        numColsBox.setName("cols");
+        numColsBox.setSelected(3);
+        numColsBox.setItems(3, 4, 5, 6);
+
+        dialog.getContentTable().defaults().pad(10);
+        dialog.getContentTable().add("Players", "black");
+        dialog.getContentTable().add(playersCountBox);
+        dialog.getContentTable().row();
+        dialog.getContentTable().add("Rows", "black");
+        dialog.getContentTable().add(numRowsBox);
+        dialog.getContentTable().row();
+        dialog.getContentTable().add("Columns", "black");
+        dialog.getContentTable().add(numColsBox);
+
+        dialog.button("Ok", "OK");
+
+        stage.addActor(dialog);
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void addUIListeners() {
@@ -90,7 +162,7 @@ public class PlayScreen implements Screen {
     }
 
     private void initIfNeeded() {
-        if (!valuesInitialized) {
+        if (configSelected && !valuesInitialized) {
             //reset data and object managers
             //Todo : Add all reset and init functions here
             GameDataController.getInstance().setDefault();
